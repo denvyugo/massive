@@ -3,7 +3,7 @@ import random
 
 limit = 10
 size = 10
-list = [random.randint(0,limit) for i in range(size)]
+list = [random.randint(0,limit) for _ in range(size)]
 print(list)
 emax = list[0]
 emin = list[0]
