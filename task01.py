@@ -7,11 +7,11 @@ hashdict = {}
 
 for i in range(len(somestr)):
     for j in range(i + 1, len(somestr)+1):
-        print(i, j,)
-        print(somestr[i:j])
         substr = somestr[i:j]
         subhash = hashlib.sha1(substr.encode('utf-8')).hexdigest()
         print(subhash)
-        if not in hashdict[subhash]:
+        if subhash not in hashdict:
             hashdict[subhash] = substr
+
+print(len(hashdict))
 
