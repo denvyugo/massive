@@ -1,18 +1,51 @@
-# Во втором массиве сохранить индексы четных элементов первого массива
-import random
-import sys
+# Закодировать строку по алгоритму Хаффмана (сжатие)
+from collections import Counter
+from collections import deque
+from collections import OrderedDict
 
-limit = 10
-size = 10
-list = [random.randint(0,limit) for _ in range(size)]
-idx = []
-for i, item in enumerate(list):
-    if item % 2 == 0:
-        idx.append(i)
+class Node:
 
-print(list, f'размер массива {sys.getsizeof(list)}') # 192 байта
-print(idx, f'размер массива {sys.getsizeof(idx)}') # 128 байт
-print(f'размеры всех переменных '
-      f'{sys.getsizeof(list) + sys.getsizeof(idx) + sys.getsizeof(limit) + sys.getsizeof(size) + sys.getsizeof(i)}')
-# всего 404 байта
-# Python 3.7, Windows 10, 64bit
+    def __init__(self, data=None, weit=None, left=None, right=None):
+        self.data = data
+        self.weit = weit
+        self.left = left
+        self.right = right
+
+    def __repr__ (self):
+        return f'node: {self.data}: {self.weit}'
+
+# somestr = input('введите какую-нибудь строку: ')
+somestr = 'bear beer beep'
+cntr = Counter(somestr)
+qchar =deque()
+ordc = OrderedDict(sorted(cntr.items(), key=lambda t: t[1]))
+
+for key, val in ordc.items():
+    n = Node(key, val)
+    qchar.append(n)
+
+# построение дерева
+while True:
+    # создать новый узел, присоединить первых два
+    n = Node()
+    n.left = qchar.popleft()
+    n.right = qchar.popleft()
+    n.weit = n.left.weit + n.right.weit
+    if len(qchar) == 0:
+        break
+
+    # ввернуть новый узел в очередь
+    i = 0
+    while n.weit > qchar[i].weit:
+        i += 1
+        if i == len(qchar):
+            break
+    if i > 0:
+        qchar.rotate(-1 * i)
+    qchar.appendleft(n)
+    if i > 0:
+        qchar.rotate(i)
+
+# обход дерева
+print(n)
+
