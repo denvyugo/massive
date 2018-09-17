@@ -15,11 +15,11 @@ class Node:
         return f'node: {self.data}: {self.weit}'
 
 # somestr = input('введите какую-нибудь строку: ')
-somestr = 'bear beer beep'
+somestr = 'beep boop beer!'
 cntr = Counter(somestr)
 qchar =deque()
 ordc = OrderedDict(sorted(cntr.items(), key=lambda t: t[1]))
-
+print(ordc)
 for key, val in ordc.items():
     n = Node(key, val)
     qchar.append(n)
@@ -48,4 +48,57 @@ while True:
 
 # обход дерева
 print(n)
+
+curn = n # current node
+pren = None # previous node
+stack = [] # stack on browsing nodes
+codes = {} # dictionary for codes
+# moving on tree
+# directions
+DN = 1
+UP = 0
+LF = 0
+RT = 1
+dep = DN # moving on depth
+wid = LF # moving on width
+path = ''
+while True:
+    # print(curn)
+    if curn is n and dep == UP and wid == RT:
+        break
+    if dep == DN and wid == LF:
+        if curn.left is not None:
+            stack.append(curn)
+            curn = curn.left
+            path = ''.join((path, str(wid)))
+        else:
+            # check on a leaf on a right
+            dep = DN
+            wid = RT
+    if dep == DN and wid == RT:
+        if curn.right is not None:
+            stack.append(curn)
+            curn = curn.right
+            path = ''.join((path, str(wid)))
+            wid = LF
+        else:
+            # leaf on right - save in dict of codes
+            codes[curn.data] = path
+            dep = UP
+    if dep == UP:
+        if len(stack) != 0:
+            pren = stack.pop()
+            if pren.left is curn:
+                dep = DN
+                wid = RT
+            curn = pren
+            path = path[:-1]
+
+print(codes)
+
+# print coding string
+for x in somestr:
+    stack.append(codes[x])
+
+print(''.join(stack))
 
